@@ -2,7 +2,7 @@ package model;
 
 public interface ITree<T extends Comparable<T>> {
 
-    void add(T element);
+    void add(T elementFather, T elementChildren, char position);
 
     boolean contains(T element);
 
