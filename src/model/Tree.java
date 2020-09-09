@@ -14,7 +14,7 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
             if (father != null) {
                 if (position == 'l' && father.getLeft() == null) {
                     father.setLeft(node);
-                } else if (position == 'r' && father.getRight() == null){
+                } else if (position == 'r' && father.getRight() == null) {
                     father.setRight(node);
                 }
             }
@@ -123,7 +123,7 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
 
     @Override
     public int countNodes() {
-        int countNodes = 0;
+        Integer countNodes = 0;
         return this.root == null ? countNodes : this.auxCountNodes(this.root, countNodes);
     }
 
@@ -144,8 +144,17 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
 
     @Override
     public String preOrder() {
-        // TODO Auto-generated method stub
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        this.auxPreOrder(this.root, stringBuilder);
+        return stringBuilder.toString();
+    }
+
+    private void auxPreOrder(Node<T> root, StringBuilder stringBuilder) {
+        if (root != null) {
+            stringBuilder.append(root.getElement().toString()).append("\t");
+            this.auxPreOrder(root.getLeft(), stringBuilder);
+            this.auxPreOrder(root.getRight(), stringBuilder);
+        }
     }
 
     @Override
