@@ -11,7 +11,22 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
 
     @Override
     public boolean contains(T element) {
-        // TODO Auto-generated method stub
+        if (root == null) {
+            return false;
+        }
+        Node<T> actualNode = root;
+        Boolean resultado = search(actualNode, element);
+        return resultado == true ? true : false;
+    }
+
+    private boolean search(Node<T> actualNode, T element) {
+        if (actualNode != null) {
+            if (actualNode.getElement().equals(element))
+                return true;
+
+            search(actualNode.getLeft(), element);
+            search(actualNode.getRight(), element);
+        }
         return false;
     }
 
