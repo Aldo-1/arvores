@@ -8,7 +8,10 @@ public class App {
         tree.add(10, 9, 'l');
         tree.add(10, 11, 'r');
         tree.add(9, 7, 'l');
-        System.out.println(tree.inOrder());
+        tree.add(11, 12, 'r');
+        System.out.println("In Order Search: " + tree.inOrder());
+        System.out.println("Pre Order Search: " + tree.preOrder());
+        System.out.println("Post Order Search: " + tree.postOrder());
         System.out.println(tree.degree(11));
         System.out.println(tree.countNodes());
         System.out.println(tree.level(9));

@@ -1,5 +1,7 @@
 package model;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Tree<T extends Comparable<T>> implements ITree<T> {
 
     private Node<T> root;
@@ -111,7 +113,10 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
 
     @Override
     public int height(T element) {
-        // TODO Auto-generated method stub
+        Node<T> node = this.getNode(this.root, element);
+        if (node != null) {
+
+        }
         return 0;
     }
 
@@ -135,17 +140,17 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
 
     @Override
     public int countNodes() {
-        Integer countNodes = 0;
-        return this.root == null ? countNodes : this.auxCountNodes(this.root, countNodes);
+        AtomicInteger atomicInteger = new AtomicInteger(0);
+        this.auxCountNodes(root, atomicInteger);
+        return atomicInteger.get();
     }
 
-    private int auxCountNodes(Node<T> root, int countNodes) {
+    private void auxCountNodes(Node<T> root, AtomicInteger atomicInteger) {
         if (root != null) {
-            countNodes++;
-            this.auxCountNodes(root.getLeft(), countNodes);
-            this.auxCountNodes(root.getRight(), countNodes);
+            atomicInteger.set(atomicInteger.get() + 1);
+            this.auxCountNodes(root.getLeft(), atomicInteger);
+            this.auxCountNodes(root.getRight(), atomicInteger);
         }
-        return countNodes;
     }
 
     @Override
