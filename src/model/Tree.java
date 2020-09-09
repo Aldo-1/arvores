@@ -52,8 +52,8 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
             if (actualNode.getElement().equals(element))
                 return true;
             // recursividade in-ordem
-            search(actualNode.getLeft(), element);
-            search(actualNode.getRight(), element);
+            auxContains(actualNode.getLeft(), element);
+            auxContains(actualNode.getRight(), element);
         }
         return false;
     }
