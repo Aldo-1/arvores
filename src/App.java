@@ -11,5 +11,6 @@ public class App {
         System.out.println(tree.inOrder());
         System.out.println(tree.degree(11));
         System.out.println(tree.countNodes());
+        System.out.println(tree.depth(9));
     }
 }
