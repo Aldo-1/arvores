@@ -6,30 +6,28 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
 
     @Override
     public void add(T elementFather, T elementChildren, char position) {
-        Node<T> node;
         if (this.root == null) {
             this.root = new Node<>(elementChildren, null);
         } else {
-            Node<T> auxRoot = this.root;
-            this.getNodeElement(auxRoot, elementFather);
-            if (auxRoot != null && position == 'l' || position == 'r') {
-                node = new Node<>(elementChildren, auxRoot);
-                if (position == 'l' && auxRoot.getLeft() == null) {
-                    auxRoot.setLeft(node);
-                } else if (position == 'r' && auxRoot.getRight() == null) {
-                    auxRoot.setRight(node);
-                }
-            }
+            this.auxAdd(this.root, elementFather, elementChildren, position);
         }
     }
 
-    private void getNodeElement(Node<T> root, T element) {
+    private void auxAdd(Node<T> root, T elementFather, T elementChildren, char position) {
         if (root != null) {
-            if (root.getElement().compareTo(element) == 0) {
-                return;
+            if (root.getElement().compareTo(elementFather) == 0) {
+                if (root != null && (position == 'l' || position == 'r')) {
+                    Node<T> node = new Node<>(elementChildren, root);
+                    if (position == 'l' && root.getLeft() == null) {
+                        root.setLeft(node);
+                    } else if (position == 'r' && root.getRight() == null) {
+                        root.setRight(node);
+                    }
+                    return;
+                }
             }
-            this.getNodeElement(root.getLeft(), element);
-            this.getNodeElement(root.getRight(), element);
+            this.auxAdd(root.getLeft(), elementFather, elementChildren, position);
+            this.auxAdd(root.getRight(), elementFather, elementChildren, position);
         }
     }
 
