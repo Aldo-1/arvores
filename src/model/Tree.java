@@ -9,25 +9,15 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
         if (this.root == null) {
             this.root = new Node<>(elementChildren, null);
         } else {
-            this.auxAdd(this.root, elementFather, elementChildren, position);
-        }
-    }
-
-    private void auxAdd(Node<T> root, T elementFather, T elementChildren, char position) {
-        if (root != null) {
-            if (root.getElement().compareTo(elementFather) == 0) {
-                if (root != null && (position == 'l' || position == 'r')) {
-                    Node<T> node = new Node<>(elementChildren, root);
-                    if (position == 'l' && root.getLeft() == null) {
-                        root.setLeft(node);
-                    } else if (position == 'r' && root.getRight() == null) {
-                        root.setRight(node);
-                    }
-                    return;
+            Node<T> father = this.getNode(this.root, elementFather);
+            Node<T> node = new Node<>(elementChildren, father);
+            if (father != null) {
+                if (position == 'l' && father.getLeft() == null) {
+                    father.setLeft(node);
+                } else if (position == 'r' && father.getRight() == null){
+                    father.setRight(node);
                 }
             }
-            this.auxAdd(root.getLeft(), elementFather, elementChildren, position);
-            this.auxAdd(root.getRight(), elementFather, elementChildren, position);
         }
     }
 
@@ -121,7 +111,8 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
 
     @Override
     public int countNodes() {
-        return this.root == null ? 0 : this.auxCountNodes(this.root, 0);
+        int countNodes = 0;
+        return this.root == null ? countNodes : this.auxCountNodes(this.root, countNodes);
     }
 
     private int auxCountNodes(Node<T> root, int countNodes) {
