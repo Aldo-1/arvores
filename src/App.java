@@ -14,6 +14,6 @@ public class App {
         System.out.println("Post Order Search: " + tree.postOrder());
         System.out.println(tree.degree(11));
         System.out.println(tree.countNodes());
-        System.out.println(tree.level(9));
+        System.out.println(tree.postOrder());
     }
 }
