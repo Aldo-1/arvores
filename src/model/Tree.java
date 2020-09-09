@@ -117,8 +117,20 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
 
     @Override
     public int level(T element) {
-        // TODO Auto-generated method stub
-        return 0;
+        int level = 1;
+        if (this.root == null) {
+            return 0;
+        }
+        // pegando o no raiz
+        Node<T> actualNode = root;
+        // retornando o resultado do no do elemento
+        Node<T> noElemento = getNode(actualNode, element);
+
+        while (noElemento.getFather() != null) {
+            level = +level + 1;
+            noElemento = noElemento.getFather();
+        }
+        return level;
     }
 
     @Override
