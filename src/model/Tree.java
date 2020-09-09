@@ -114,10 +114,26 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
     @Override
     public int height(T element) {
         Node<T> node = this.getNode(this.root, element);
-        if (node != null) {
+        return node == null ? 0 : this.auxHeight(node);
+    }
 
+    private int auxHeight(Node<T> root) {
+        int heightLeft;
+        int heightRight;
+        if (root.getLeft() == null) {
+            heightLeft = 0;
+        } else {
+            heightLeft = this.auxHeight(root.getLeft());
         }
-        return 0;
+        if (root.getRight() == null) {
+            heightRight = 0;
+        } else {
+            heightRight = this.auxHeight(root.getRight());
+        }
+        if (root.getRight() == null && root.getLeft() == null) {
+            return Math.max(heightLeft, heightRight);
+        }
+        return 1 + Math.max(heightLeft, heightRight);
     }
 
     @Override
@@ -225,7 +241,7 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
     @Override
     public String postOrder() {
         StringBuilder stringBuilder = new StringBuilder();
-        auxPostOrder(this.root, stringBuilder);
+        this.auxPostOrder(this.root, stringBuilder);
         return stringBuilder.toString();
     }
 
@@ -239,7 +255,22 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
 
     @Override
     public Tree<T> mirror() {
-        // TODO Auto-generated method stub
-        return null;
+        Tree<T> mirrorTree = new Tree<>();
+        mirrorTree.add(null, root.getElement(), 'c');
+        this.auxMirror(mirrorTree, this.root);
+        return mirrorTree;
+    }
+
+    private void auxMirror(Tree<T> tree, Node<T> root) {
+        if (root != null) {
+            if (root.getLeft() != null) {
+                tree.add(root.getElement(), root.getLeft().getElement(), 'r');
+            }
+            if (root.getRight() != null) {
+                tree.add(root.getElement(), root.getRight().getElement(), 'l');
+            }
+            this.auxMirror(tree, root.getLeft());
+            this.auxMirror(tree, root.getRight());
+        }
     }
 }
