@@ -9,6 +9,6 @@ public class App {
         tree.add(10, 11, 'r');
         tree.add(9, 7, 'l');
         System.out.println(tree.inOrder());
-        System.out.println(tree.degree(11));
+        System.out.println(tree.depth(9));
     }
 }
