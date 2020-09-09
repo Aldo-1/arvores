@@ -48,12 +48,12 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
     @Override
     public boolean contains(T element) {
         // Se a raiz for igual ao null ele retornar falso pois nao tem arvore.
-        if (root == null) {
+        if (this.root == null) {
             return false;
         }
 
         // pegando o no raiz
-        Node<T> actualNode = root;
+        Node<T> actualNode = this.root;
         // retornando o resultado do no do elemento
         Node<T> noElemento = getNode(actualNode, element);
 
@@ -67,12 +67,12 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
         int contadorGrau = 0;
 
         // Se a raiz for igual ao null ele retornar falso pois nao tem arvore.
-        if (root == null) {
+        if (this.root == null) {
             return 0;
         }
 
         // vai comecar pelo no
-        Node<T> actualNode = root;
+        Node<T> actualNode = this.root;
 
         // vai pegar o elemento da escolha
         Node<T> currentElement = getNode(actualNode, element);
@@ -98,7 +98,7 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
             return 0;
         }
         // pegando o no raiz
-        Node<T> actualNode = root;
+        Node<T> actualNode = this.root;
         // retornando o resultado do no do elemento
         Node<T> noElemento = getNode(actualNode, element);
 
@@ -122,7 +122,7 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
             return 0;
         }
         // pegando o no raiz
-        Node<T> actualNode = root;
+        Node<T> actualNode = this.root;
         // retornando o resultado do no do elemento
         Node<T> noElemento = getNode(actualNode, element);
 
@@ -150,7 +150,40 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
 
     @Override
     public boolean remove(T element) {
-        // TODO Auto-generated method stub
+        if (this.root == null) {
+            return false;
+        }
+        // pegando o no raiz
+        Node<T> actualNode = this.root;
+        // retornando o resultado do no do elemento
+        Node<T> noElemento = getNode(actualNode, element);
+
+        if (noElemento.getLeft() == null && noElemento.getRight() == null) {
+            Node<T> noPai = noElemento.getFather();
+            if (noPai.getLeft() == noElemento) {
+                noPai.setLeft(null);
+                noElemento = null;
+                return true;
+            } else if (noPai.getRight() == noElemento) {
+                noPai.setRight(null);
+                noElemento = null;
+                return true;
+            }
+        } else if (noElemento.getLeft() == null || noElemento.getRight() == null) {
+            Node<T> noPai = noElemento.getFather();
+            if (noElemento.getLeft() != null) {
+                Node<T> noFilho = noElemento.getLeft();
+                noElemento = null;
+                noPai.setLeft(noFilho);
+                return true;
+            } else if (noElemento.getRight() != null) {
+                Node<T> noFilho = noElemento.getRight();
+                noElemento = null;
+                noPai.setRight(noFilho);
+                return true;
+            }
+
+        }
         return false;
     }
 
