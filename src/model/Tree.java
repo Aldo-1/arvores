@@ -186,8 +186,17 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
 
     @Override
     public String postOrder() {
-        // TODO Auto-generated method stub
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        auxPostOrder(this.root, stringBuilder);
+        return stringBuilder.toString();
+    }
+
+    private void auxPostOrder(Node<T> root, StringBuilder stringBuilder) {
+        if (root != null) {
+            this.auxPostOrder(root.getLeft(), stringBuilder);
+            this.auxPostOrder(root.getRight(), stringBuilder);
+            stringBuilder.append(root.getElement().toString()).append("\t");
+        }
     }
 
     @Override
