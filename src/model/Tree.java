@@ -31,31 +31,44 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
         }
     }
 
+    private Node<T> getNode(Node<T> actualNode, T element) {
+        Node<T> esquerda, direita;
+        // verificando se o no atual que ele recebe e nulo
+        if (actualNode != null) {
+            // verificando se o elemento do no atual é igual ao elemento
+            if (actualNode.getElement().equals(element)) {
+                return actualNode;
+            }
+
+            // recursividade in-ordem
+
+            esquerda = getNode(actualNode.getLeft(), element);
+            if (esquerda != null) {
+                return esquerda;
+            }
+            direita = getNode(actualNode.getRight(), element);
+            if (direita != null) {
+                return direita;
+            }
+
+        }
+        return null;
+    }
+
     @Override
     public boolean contains(T element) {
         // Se a raiz for igual ao null ele retornar falso pois nao tem arvore.
         if (root == null) {
             return false;
         }
+
         // pegando o no raiz
         Node<T> actualNode = root;
-        // retorando o resultado da pesquisa
-        Boolean resultado = auxContains(actualNode, element);
-        // ternario para retornar true ou false
-        return resultado == true ? true : false;
-    }
+        // retornando o resultado do no do elemento
+        Node<T> noElemento = getNode(actualNode, element);
 
-    private boolean auxContains(Node<T> actualNode, T element) {
-        // verificando se o no atual que ele recebe e nulo
-        if (actualNode != null) {
-            // verificando se o elemento do no atual é igual ao elemento
-            if (actualNode.getElement().equals(element))
-                return true;
-            // recursividade in-ordem
-            auxContains(actualNode.getLeft(), element);
-            auxContains(actualNode.getRight(), element);
-        }
-        return false;
+        // ternario para retornar true ou false
+        return noElemento != null ? true : false;
     }
 
     @Override
@@ -72,33 +85,20 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
         Node<T> actualNode = root;
 
         // vai pegar o elemento da escolha
-        Node<T> currentElement = auxDegree(actualNode, element);
+        Node<T> currentElement = getNode(actualNode, element);
 
         // vai verificar se o da esquerda o elemento é diferente de nulo
         // e somar no contadorGrau
-        if (currentElement.getLeft().getElement() != null) {
+        if (currentElement.getLeft() != null) {
             contadorGrau = contadorGrau + 1;
         }
         // vai verificar se o da direita o elemento é diferente de nulo
         // e somar no contadorGrau
-        if (currentElement.getRight().getElement() != null) {
+        if (currentElement.getRight() != null) {
             contadorGrau = contadorGrau + 1;
         }
 
         return contadorGrau;
-    }
-
-    private Node<T> auxDegree(Node<T> actualNode, T element) {
-        // verificando se o no atual que ele recebe e nulo
-        if (actualNode != null) {
-            // verificando se o elemento do no atual é igual ao elemento
-            if (actualNode.getElement().equals(element))
-                return actualNode;
-            // recursividade in-ordem
-            auxDegree(actualNode.getLeft(), element);
-            auxDegree(actualNode.getRight(), element);
-        }
-        return null;
     }
 
     @Override
