@@ -35,7 +35,28 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
 
     @Override
     public boolean contains(T element) {
-        // TODO Auto-generated method stub
+        // Se a raiz for igual ao null ele retornar falso pois nao tem arvore.
+        if (root == null) {
+            return false;
+        }
+        // pegando o no raiz
+        Node<T> actualNode = root;
+        // retorando o resultado da pesquisa
+        Boolean resultado = search(actualNode, element);
+        // ternario para retornar true ou false
+        return resultado == true ? true : false;
+    }
+
+    private boolean search(Node<T> actualNode, T element) {
+        // verificando se o no atual que ele recebe e nulo
+        if (actualNode != null) {
+            // verificando se o elemento do no atual é igual ao elemento
+            if (actualNode.getElement().equals(element))
+                return true;
+            // recursividade pre-ordem
+            search(actualNode.getLeft(), element);
+            search(actualNode.getRight(), element);
+        }
         return false;
     }
 
