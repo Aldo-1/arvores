@@ -179,6 +179,10 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
         // retornando o resultado do no do elemento
         Node<T> noElemento = getNode(actualNode, element);
 
+        if (noElemento.getFather() == null) {
+            System.out.println("Nao e possivel remover raiz");
+            return false;
+        }
         if (noElemento.getLeft() == null && noElemento.getRight() == null) {
             Node<T> noPai = noElemento.getFather();
             if (noPai.getLeft() == noElemento) {
