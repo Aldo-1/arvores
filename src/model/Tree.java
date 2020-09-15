@@ -42,7 +42,6 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
             if (direita != null) {
                 return direita;
             }
-
         }
         return null;
     }
@@ -89,7 +88,6 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
         if (currentElement.getRight() != null) {
             contadorGrau = contadorGrau + 1;
         }
-
         return contadorGrau;
     }
 
@@ -207,7 +205,6 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
                 noPai.setRight(noFilho);
                 return true;
             }
-
         }
         return false;
     }
