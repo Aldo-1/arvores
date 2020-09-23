@@ -2,8 +2,6 @@ package model;
 
 public interface ITree<T extends Comparable<T>> {
 
-    void add(T elementFather, T elementChildren, char position);
-
     boolean contains(T element);
 
     int degree(T element);
@@ -23,6 +21,4 @@ public interface ITree<T extends Comparable<T>> {
     String inOrder();
 
     String postOrder();
-
-    Tree<T> mirror();
 }

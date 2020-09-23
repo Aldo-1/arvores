@@ -2,67 +2,52 @@ package model;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Tree<T extends Comparable<T>> implements ITree<T> {
+public class BinaryTree<T extends Comparable<T>> implements ITree<T> {
 
     private Node<T> root;
 
-    public Tree() {
-        this.root = null;
-    }
-
-    public void add(T elementFather, T elementChildren, char position) {
+    public void add(T element) {
         if (this.root == null) {
-            this.root = new Node<>(elementChildren, null);
+            this.root = new Node<T>(element, null);
         } else {
-            Node<T> father = this.getNode(this.root, elementFather);
-            Node<T> node = new Node<>(elementChildren, father);
-            if (father != null) {
-                if (position == 'l' && father.getLeft() == null) {
-                    father.setLeft(node);
-                } else if (position == 'r' && father.getRight() == null) {
-                    father.setRight(node);
-                }
+            this.auxAdd(this.root, element);
+        }
+    }
+
+    private void auxAdd(Node<T> root, T element) {
+        if (root.getElement().compareTo(element) == -1) {
+            if (root.getRight() == null) {
+                Node<T> right = new Node<T>(element, root);
+                root.setRight(right);
+            } else {
+                this.auxAdd(root.getRight(), element);
+            }
+        } else if (root.getElement().compareTo(element) == 1) {
+            if (root.getLeft() == null) {
+                Node<T> left = new Node<T>(element, root);
+                root.setLeft(left);
+            } else {
+                this.auxAdd(root.getLeft(), element);
             }
         }
     }
 
-    private Node<T> getNode(Node<T> actualNode, T element) {
-        Node<T> esquerda, direita;
-        // verificando se o no atual que ele recebe e nulo
-        if (actualNode != null) {
-            // verificando se o elemento do no atual é igual ao elemento
-            if (actualNode.getElement().equals(element)) {
-                return actualNode;
-            }
-
-            // recursividade in-ordem
-
-            esquerda = getNode(actualNode.getLeft(), element);
-            if (esquerda != null) {
-                return esquerda;
-            }
-            direita = getNode(actualNode.getRight(), element);
-            if (direita != null) {
-                return direita;
-            }
+    private Node<T> getNode(Node<T> root, T element) {
+        if (root == null) {
+            return null;
         }
-        return null;
+        if (root.getElement().compareTo(element) == 0) {
+            return root;
+        }
+        if (root.getElement().compareTo(element) == -1) {
+            return this.getNode(root.getRight(), element);
+        }
+        return this.getNode(root.getLeft(), element);
     }
 
     @Override
     public boolean contains(T element) {
-        // Se a raiz for igual ao null ele retornar falso pois nao tem arvore.
-        if (this.root == null) {
-            return false;
-        }
-
-        // pegando o no raiz
-        Node<T> actualNode = this.root;
-        // retornando o resultado do no do elemento
-        Node<T> noElemento = getNode(actualNode, element);
-
-        // ternario para retornar true ou false
-        return noElemento != null ? true : false;
+        return this.getNode(this.root, element) == null ? false : true;
     }
 
     @Override
@@ -79,7 +64,7 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
         Node<T> actualNode = this.root;
 
         // vai pegar o elemento da escolha
-        Node<T> currentElement = getNode(actualNode, element);
+        Node<T> currentElement = this.getNode(actualNode, element);
 
         // vai verificar se o da esquerda o elemento é diferente de nulo
         // e somar no contadorGrau
@@ -146,7 +131,7 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
         // pegando o no raiz
         Node<T> actualNode = this.root;
         // retornando o resultado do no do elemento
-        Node<T> noElemento = getNode(actualNode, element);
+        Node<T> noElemento = this.getNode(actualNode, element);
 
         while (noElemento.getFather() != null) {
             level = +level + 1;
@@ -172,44 +157,80 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
 
     @Override
     public boolean remove(T element) {
-        if (this.root == null) {
+        Node<T> node = this.getNode(this.root, element);
+        if (node == null) {
             return false;
         }
-        // pegando o no raiz
-        Node<T> actualNode = this.root;
-        // retornando o resultado do no do elemento
-        Node<T> noElemento = getNode(actualNode, element);
+        Node<T> father = node.getFather();
+        if (node.getLeft() == null && node.getRight() == null) {
+            if (node != this.root) {
+                if (father.getLeft() == node) {
+                    father.setLeft(null);
+                } else {
+                    father.setRight(null);
+                }
+                node.setFather(null);
+                node = null;
+            } else {
+                this.root = null;
+            }
+        } else {
+            if (node.getLeft() == null && node.getRight() != null) {
+                if (node == this.root) {
+                    this.root = this.root.getRight();
+                    this.root.setFather(null);
+                } else {
+                    if (father.getRight() == node) {
+                        father.setRight(node.getRight());
+                    } else {
+                        father.setLeft(node.getRight());
+                    }
+                }
+            } else if (node.getLeft() != null && node.getRight() == null) {
+                if (node == this.root) {
+                    this.root = this.root.getLeft();
+                    this.root.setFather(null);
+                } else {
+                    if (father.getRight() == node) {
+                        father.setRight(node.getLeft());
+                    } else {
+                        father.setLeft(node.getLeft());
+                    }
+                }
+            } else {
+                Node<T> suc = this.getMin(node.getRight());
+                if (suc.getFather() == node) {
+                    if (father != null && father.getRight() == node) {
+                        father.setRight(suc);
+                    } else {
+                        if (father != null) {
+                            father.setLeft(suc);
+                        }
+                    }
+                } else {
+                    father = suc.getFather();
+                    if (father.getRight() == suc) {
+                        father.setRight(suc.getRight());
+                    } else {
+                        father.setLeft(suc.getRight());
+                    }
+                    if (suc.getRight() != null) {
+                        suc.getRight().setFather(father);
+                    }
+                }
+                suc.setFather(node.getFather());
+                suc.setLeft(node.getLeft());
+                node.getLeft().setFather(suc);
+                if (node == this.root) {
+                    this.root = suc;
+                }
+            }
+        }
+        return true;
+    }
 
-        if (noElemento.getFather() == null) {
-            System.out.println("Nao e possivel remover raiz");
-            return false;
-        }
-        if (noElemento.getLeft() == null && noElemento.getRight() == null) {
-            Node<T> noPai = noElemento.getFather();
-            if (noPai.getLeft() == noElemento) {
-                noPai.setLeft(null);
-                noElemento = null;
-                return true;
-            } else if (noPai.getRight() == noElemento) {
-                noPai.setRight(null);
-                noElemento = null;
-                return true;
-            }
-        } else if (noElemento.getLeft() == null || noElemento.getRight() == null) {
-            Node<T> noPai = noElemento.getFather();
-            if (noElemento.getLeft() != null) {
-                Node<T> noFilho = noElemento.getLeft();
-                noElemento = null;
-                noPai.setLeft(noFilho);
-                return true;
-            } else if (noElemento.getRight() != null) {
-                Node<T> noFilho = noElemento.getRight();
-                noElemento = null;
-                noPai.setRight(noFilho);
-                return true;
-            }
-        }
-        return false;
+    public Node<T> getMin(Node<T> root) {
+        return root.getLeft() == null ? root : this.getMin(root.getRight());
     }
 
     @Override
@@ -254,26 +275,6 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
             this.auxPostOrder(root.getLeft(), stringBuilder);
             this.auxPostOrder(root.getRight(), stringBuilder);
             stringBuilder.append(root.getElement().toString()).append("\t");
-        }
-    }
-
-    public Tree<T> mirror() {
-        Tree<T> mirrorTree = new Tree<>();
-        mirrorTree.add(null, root.getElement(), 'c');
-        this.auxMirror(mirrorTree, this.root);
-        return mirrorTree;
-    }
-
-    private void auxMirror(Tree<T> tree, Node<T> root) {
-        if (root != null) {
-            if (root.getLeft() != null) {
-                tree.add(root.getElement(), root.getLeft().getElement(), 'r');
-            }
-            if (root.getRight() != null) {
-                tree.add(root.getElement(), root.getRight().getElement(), 'l');
-            }
-            this.auxMirror(tree, root.getLeft());
-            this.auxMirror(tree, root.getRight());
         }
     }
 }
