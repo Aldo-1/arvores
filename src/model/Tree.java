@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Tree<T extends Comparable<T>> implements ITree<T> {
@@ -72,7 +74,7 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
 
         // Se a raiz for igual ao null ele retornar falso pois nao tem arvore.
         if (this.root == null) {
-            return 0;
+            return -1;
         }
 
         // vai comecar pelo no
@@ -80,42 +82,46 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
 
         // vai pegar o elemento da escolha
         Node<T> currentElement = getNode(actualNode, element);
-
-        // vai verificar se o da esquerda o elemento é diferente de nulo
-        // e somar no contadorGrau
-        if (currentElement.getLeft() != null) {
-            contadorGrau = contadorGrau + 1;
+        if (currentElement != null) {
+            // vai verificar se o da esquerda o elemento é diferente de nulo
+            // e somar no contadorGrau
+            if (currentElement.getLeft() != null) {
+                contadorGrau++;
+            }
+            // vai verificar se o da direita o elemento é diferente de nulo
+            // e somar no contadorGrau
+            if (currentElement.getRight() != null) {
+                contadorGrau++;
+            }
+            return contadorGrau;
         }
-        // vai verificar se o da direita o elemento é diferente de nulo
-        // e somar no contadorGrau
-        if (currentElement.getRight() != null) {
-            contadorGrau = contadorGrau + 1;
-        }
-        return contadorGrau;
+        return -1;
     }
 
     @Override
     public int depth(T element) {
         int profundidade = 0;
         if (this.root == null) {
-            return 0;
+            return -1;
         }
         // pegando o no raiz
         Node<T> actualNode = this.root;
         // retornando o resultado do no do elemento
         Node<T> noElemento = getNode(actualNode, element);
-
-        while (noElemento.getFather() != null) {
-            profundidade = +profundidade + 1;
-            noElemento = noElemento.getFather();
+        if (noElemento != null) {
+            while (noElemento.getFather() != null) {
+                profundidade = +profundidade + 1;
+                noElemento = noElemento.getFather();
+            }
+            return profundidade;
         }
-        return profundidade;
+        return -1;
     }
 
     @Override
     public int height(T element) {
         Node<T> node = this.getNode(this.root, element);
-        return node == null ? 0 : this.auxHeight(node);
+        return node == null ? -1 : this.auxHeight(node);
     }
 
     private int auxHeight(Node<T> root) {
@@ -141,18 +147,20 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
     public int level(T element) {
         int level = 1;
         if (this.root == null) {
-            return 0;
+            return -1;
         }
         // pegando o no raiz
         Node<T> actualNode = this.root;
         // retornando o resultado do no do elemento
         Node<T> noElemento = getNode(actualNode, element);
-
-        while (noElemento.getFather() != null) {
-            level = +level + 1;
-            noElemento = noElemento.getFather();
+        if (noElemento != null) {
+            while (noElemento.getFather() != null) {
+                level = +level + 1;
+                noElemento = noElemento.getFather();
+            }
+            return level;
         }
-        return level;
+        return -1;
     }
 
     @Override
@@ -274,6 +282,24 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
             }
             this.auxMirror(tree, root.getLeft());
             this.auxMirror(tree, root.getRight());
+        }
+    }
+
+    public BinaryTree<T> toBinaryTree() {
+        List<Node<T>> nodes = new ArrayList<>();
+        BinaryTree<T> binaryTree = new BinaryTree<>();
+        this.auxToBinaryTree(this.root, nodes);
+        for (Node<T> node : nodes) {
+            binaryTree.add(node.getElement());
+        }
+        return binaryTree;
+    }
+
+    private void auxToBinaryTree(Node<T> root, List<Node<T>> nodes) {
+        if (root != null) {
+            nodes.add(root);
+            this.auxToBinaryTree(root.getLeft(), nodes);
+            this.auxToBinaryTree(root.getRight(), nodes);
         }
     }
 }
