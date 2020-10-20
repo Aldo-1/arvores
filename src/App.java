@@ -1,3 +1,4 @@
+import model.BinaryTree;
 import model.Tree;
 
 public class App {
@@ -19,7 +20,6 @@ public class App {
         tree.add(75, 70, 'l');
         tree.add(75, 80, 'r');
         tree.add(25, 27, 'r');
-
         System.out.println("Contains(25) = " + tree.contains(25));
         System.out.println("Grau(25) = " + tree.degree(25));
         System.out.println("Profundidade(27) = " + tree.depth(27));
@@ -27,34 +27,38 @@ public class App {
         System.out.println("Nível(27) = " + tree.level(27));
         System.out.println("Quantidade de nós = " + tree.countNodes());
 
-        // Tree<Integer> mirrorTree = tree.mirror();
+        Tree<Integer> mirrorTree = tree.mirror();
+        System.out.println("In Order Search: " + mirrorTree.inOrder());
+        System.out.println("Pre Order Search: " + mirrorTree.preOrder());
+        System.out.println("Post Order Search: " + mirrorTree.postOrder());
+        System.out.println("Count Node's: " + mirrorTree.countNodes());
+        System.out.println("Height Root: " + mirrorTree.height(45));
 
-        // System.out.println("In Order Search: " + mirrorTree.inOrder());
-        // System.out.println("Pre Order Search: " + mirrorTree.preOrder());
-        // System.out.println("Post Order Search: " + mirrorTree.postOrder());
-
-        // System.out.println("Count Node's: " + mirrorTree.countNodes());
-
-        // System.out.println("Height Root: " + mirrorTree.height(10));
-
-        // BinaryTree<Integer> binaryTree = new BinaryTree<>();
-        // binaryTree.add(40);
-        // binaryTree.add(65);
-        // binaryTree.add(30);
-        // binaryTree.add(75);
-        // binaryTree.add(25);
-        // binaryTree.add(35);
-        // binaryTree.add(38);
-        // binaryTree.add(28);
-        // binaryTree.add(26);
-
-        // System.out.println("In Order Search: " + binaryTree.inOrder());
-        // System.out.println("Pre Order Search: " + binaryTree.preOrder());
-        // System.out.println("Post Order Search: " + binaryTree.postOrder());
-        // System.out.println("Count Node's: " + binaryTree.countNodes());
-        // System.out.println("Height Root: " + binaryTree.height(40));
-
-        // binaryTree.remove(30);
-        // System.out.println("In Order Search: " + binaryTree.inOrder());
+        BinaryTree<Integer> binaryTree = new BinaryTree<>();
+        binaryTree.add(45);
+        binaryTree.add(30);
+        binaryTree.add(60);
+        binaryTree.add(20);
+        binaryTree.add(40);
+        binaryTree.add(50);
+        binaryTree.add(75);
+        binaryTree.add(10);
+        binaryTree.add(25);
+        binaryTree.add(35);
+        binaryTree.add(42);
+        binaryTree.add(49);
+        binaryTree.add(52);
+        binaryTree.add(70);
+        binaryTree.add(80);
+        binaryTree.add(27);
+        System.out.println("In Order Search: " + binaryTree.inOrder());
+        System.out.println("Pre Order Search: " + binaryTree.preOrder());
+        System.out.println("Post Order Search: " + binaryTree.postOrder());
+        System.out.println("Count Node's: " + binaryTree.countNodes());
+        System.out.println("Height: " + binaryTree.height(45));
+        binaryTree.remove(45);
+        System.out.println("In Order Search: " + binaryTree.inOrder());
+        System.out.println("Pre Order Search: " + binaryTree.preOrder());
+        System.out.println("Post Order Search: " + binaryTree.postOrder());
     }
 }

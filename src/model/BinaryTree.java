@@ -185,6 +185,7 @@ public class BinaryTree<T extends Comparable<T>> implements ITree<T> {
                     } else {
                         father.setLeft(node.getRight());
                     }
+                    node.getRight().setFather(father);
                 }
             } else if (node.getLeft() != null && node.getRight() == null) {
                 if (node == this.root) {
@@ -196,6 +197,7 @@ public class BinaryTree<T extends Comparable<T>> implements ITree<T> {
                     } else {
                         father.setLeft(node.getLeft());
                     }
+                    node.getLeft().setFather(father);
                 }
             } else {
                 Node<T> suc = this.getMin(node.getRight());
@@ -216,11 +218,25 @@ public class BinaryTree<T extends Comparable<T>> implements ITree<T> {
                     }
                     if (suc.getRight() != null) {
                         suc.getRight().setFather(father);
+                        if (suc == father.getLeft()) {
+                            father.setLeft(suc.getRight());
+                        } else {
+                            father.setRight(suc.getRight());
+                        }
                     }
+                }
+                if (suc.getFather() != node) {
+                    suc.setRight(node.getRight());
+                    node.getRight().setFather(suc);
                 }
                 suc.setFather(node.getFather());
                 suc.setLeft(node.getLeft());
                 node.getLeft().setFather(suc);
+                if (node.getFather() != null && node == node.getFather().getRight()) {
+                    father.setRight(suc);
+                } else if (node.getFather() != null && node == node.getFather().getLeft()) {
+                    node.getFather().setLeft(suc);
+                }
                 if (node == this.root) {
                     this.root = suc;
                 }
@@ -229,8 +245,8 @@ public class BinaryTree<T extends Comparable<T>> implements ITree<T> {
         return true;
     }
 
-    public Node<T> getMin(Node<T> root) {
-        return root.getLeft() == null ? root : this.getMin(root.getRight());
+    private Node<T> getMin(Node<T> root) {
+        return root.getLeft() == null ? root : this.getMin(root.getLeft());
     }
 
     @Override
