@@ -1,9 +1,9 @@
+import model.BinaryTreeSearch;
 import model.BinaryTree;
-import model.Tree;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        Tree<Integer> tree = new Tree<>();
+        BinaryTree<Integer> tree = new BinaryTree<>();
         tree.add(null, 45, 'r');
         tree.add(45, 30, 'l');
         tree.add(45, 60, 'r');
@@ -27,14 +27,14 @@ public class App {
         System.out.println("Nível(27) = " + tree.level(27));
         System.out.println("Quantidade de nós = " + tree.countNodes());
 
-        Tree<Integer> mirrorTree = tree.mirror();
+        BinaryTree<Integer> mirrorTree = tree.mirror();
         System.out.println("In Order Search: " + mirrorTree.inOrder());
         System.out.println("Pre Order Search: " + mirrorTree.preOrder());
         System.out.println("Post Order Search: " + mirrorTree.postOrder());
         System.out.println("Count Node's: " + mirrorTree.countNodes());
         System.out.println("Height Root: " + mirrorTree.height(45));
 
-        BinaryTree<Integer> binaryTree = new BinaryTree<>();
+        BinaryTreeSearch<Integer> binaryTree = new BinaryTreeSearch<>();
         binaryTree.add(45);
         binaryTree.add(30);
         binaryTree.add(60);
