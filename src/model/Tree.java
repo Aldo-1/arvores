@@ -12,6 +12,10 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
         this.root = null;
     }
 
+    public Node<T> getRoot() {
+        return root;
+    }
+
     public void add(T elementFather, T elementChildren, char position) {
         if (this.root == null) {
             this.root = new Node<>(elementChildren, null);
@@ -300,6 +304,79 @@ public class Tree<T extends Comparable<T>> implements ITree<T> {
             nodes.add(root);
             this.auxToBinaryTree(root.getLeft(), nodes);
             this.auxToBinaryTree(root.getRight(), nodes);
+        }
+    }
+
+    public boolean isEqual(Tree<T> tree) {
+        return this.auxIsEqual(this.root, tree.getRoot());
+    }
+
+    private boolean auxIsEqual(Node<T> root1, Node<T> root2) {
+        if (root1 == null && root2 == null) {
+            return true;
+        } else {
+            if (root1 == null && root2 != null || root1 != null && root2 == null) {
+                return false;
+            }
+        }
+        if (!auxIsEqual(root1.getLeft(), root2.getLeft())) {
+            return false;
+        }
+        return this.auxIsEqual(root1.getRight(), root2.getRight());
+    }
+
+    public int less() {
+        if (this.root.getElement() instanceof Integer) {
+            AtomicInteger acctual_less = new AtomicInteger(Integer.MAX_VALUE);
+            this.auxLess(acctual_less, (Node<Integer>) root);
+            return acctual_less.get();
+        }
+        return 0;
+    }
+
+    private void auxLess(AtomicInteger acctual_less, Node<Integer> root) {
+        if (root != null) {
+            if (root.getElement().compareTo(acctual_less.get()) == -1) {
+                acctual_less.set(root.getElement());
+            }
+            this.auxLess(acctual_less, root.getLeft());
+            this.auxLess(acctual_less, root.getRight());
+        }
+    }
+
+    public double mean() {
+        if (this.root.getElement() instanceof Integer) {
+            AtomicInteger sum = new AtomicInteger(0);
+            this.auxMean(sum, (Node<Integer>) root);
+            return sum.get() / this.countNodes();
+        }
+        return 0.0;
+    }
+
+    public void auxMean(AtomicInteger sum, Node<Integer> root) {
+        if (root != null) {
+            sum.set(sum.get() + root.getElement());
+            this.auxMean(sum, root.getLeft());
+            this.auxMean(sum, root.getRight());
+        }
+    }
+
+    public int sum() {
+        if (this.root.getElement() instanceof Integer) {
+            AtomicInteger sum = new AtomicInteger(0);
+            this.auxSum(sum, (Node<Integer>) root);
+            return sum.get();
+        }
+        return 0;
+    }
+
+    private void auxSum(AtomicInteger sum, Node<Integer> root) {
+        if (root != null) {
+            if (root.getElement() % 2 == 0) {
+                sum.set(sum.get() + root.getElement());
+            }
+            this.auxSum(sum, root.getLeft());
+            this.auxSum(sum, root.getRight());
         }
     }
 }
