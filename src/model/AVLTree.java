@@ -12,10 +12,25 @@ public class AVLTree<T extends Comparable<T>> extends Tree<T> {
         } else {
             this.auxAdd(this.root, element);
         }
+
     }
 
     private void auxAdd(Node<T> root, T element) {
-
+        if (root.getElement().compareTo(element) == -1) {
+            if (root.getRight() == null) {
+                Node<T> right = new Node<T>(element, root);
+                root.setRight(right);
+            } else {
+                this.auxAdd(root.getRight(), element);
+            }
+        } else if (root.getElement().compareTo(element) == 1) {
+            if (root.getLeft() == null) {
+                Node<T> left = new Node<T>(element, root);
+                root.setLeft(left);
+            } else {
+                this.auxAdd(root.getLeft(), element);
+            }
+        }
     }
 
     @Override
@@ -40,10 +55,54 @@ public class AVLTree<T extends Comparable<T>> extends Tree<T> {
     }
 
     private void leftRotation(Node<T> node) {
-
+        if (node != null) {
+            Node<T> right = node.getRight();
+            if (right != null) {
+                Node<T> left = right.getLeft();
+                Node<T> father = node.getFather();
+                if (father == null) {
+                    this.root = right;
+                } else {
+                    if (node == father.getLeft()) {
+                        father.setLeft(right);
+                    } else {
+                        father.setRight(right);
+                    }
+                }
+                node.setFather(right);
+                right.setLeft(node);
+                node.setRight(left);
+                right.setFather(father);
+                if (left != null) {
+                    left.setFather(node);
+                }
+            }
+        }
     }
 
     private void rightRotation(Node<T> node) {
-
+        if (node != null) {
+            Node<T> left = node.getLeft();
+            if (left != null) {
+                Node<T> right = left.getRight();
+                Node<T> father = node.getFather();
+                if (father == null) {
+                    this.root = left;
+                } else {
+                    if (node == father.getLeft()) {
+                        father.setLeft(left);
+                    } else {
+                        father.setRight(left);
+                    }
+                }
+                node.setFather(left);
+                left.setRight(node);
+                node.setLeft(right);
+                left.setFather(father);
+                if (right != null) {
+                    right.setFather(node);
+                }
+            }
+        }
     }
 }
