@@ -54,6 +54,18 @@ public class AVLTree<T extends Comparable<T>> extends Tree<T> {
         return heightLeft > heightRight ? heightLeft : heightRight;
     }
 
+    private void doubleLeftRotation(Node<T> pivo) {
+        Node<T> left = pivo.getLeft();
+        this.leftRotation(left);
+        this.rightRotation(pivo);
+    }
+
+    private void doubleRightRotation(Node<T> pivo) {
+        Node<T> right = pivo.getRight();
+        this.rightRotation(right);
+        this.leftRotation(pivo);
+    }
+
     private void leftRotation(Node<T> node) {
         if (node != null) {
             Node<T> right = node.getRight();
