@@ -12,23 +12,42 @@ public class AVLTree<T extends Comparable<T>> extends Tree<T> {
         } else {
             this.auxAdd(this.root, element);
         }
-
     }
 
     private void auxAdd(Node<T> root, T element) {
-        if (root.getElement().compareTo(element) == -1) {
-            if (root.getRight() == null) {
-                Node<T> right = new Node<T>(element, root);
-                root.setRight(right);
+        if (root.getElement().compareTo(element) != 0) {
+            if (element.compareTo(root.getElement()) == 1) {
+                if (root.getRight() == null) {
+                    Node<T> right = new Node<T>(element, root);
+                    root.setRight(right);
+                } else {
+                    this.auxAdd(root.getRight(), element);
+                    this.balancFactor(root);
+                    if (root.getBf() == -2) {
+                        if (element.compareTo(root.getRight().getElement()) == 1) {
+                            leftRotation(root);
+                        } else {
+                            rightRotation(root.getRight());
+                            leftRotation(root);
+                        }
+                    }
+                }
             } else {
-                this.auxAdd(root.getRight(), element);
-            }
-        } else if (root.getElement().compareTo(element) == 1) {
-            if (root.getLeft() == null) {
-                Node<T> left = new Node<T>(element, root);
-                root.setLeft(left);
-            } else {
-                this.auxAdd(root.getLeft(), element);
+                if (root.getLeft() == null) {
+                    Node<T> left = new Node<T>(element, root);
+                    root.setLeft(left);
+                } else {
+                    this.auxAdd(root.getLeft(), element);
+                    this.balancFactor(root);
+                    if (root.getBf() == 2) {
+                        if (element.compareTo(root.getLeft().getElement()) == -1) {
+                            rightRotation(root);
+                        } else {
+                            leftRotation(root.getLeft());
+                            rightRotation(root);
+                        }
+                    }
+                }
             }
         }
     }
