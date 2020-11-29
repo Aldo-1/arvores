@@ -4,43 +4,53 @@ import model.AVLTree;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        Scanner input = new Scanner(System.in);
         AVLTree<Integer> tree = new AVLTree<>();
-        System.out.println("Qual o tamanho que voce deseja para sua arvore?");
-        int tamanho = input.nextInt();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Qual a quantidade de nós que irá ter na arvore? ");
+        int tamanho = scanner.nextInt();
         int contador = 0;
         boolean start = true;
+        int elemento;
         while (contador < tamanho) {
-            System.out.println("Digite o numero que deseja colocar na arvore");
-            int numero = input.nextInt();
-            tree.add(numero);
-            contador = contador + 1;
+            System.out.print("Digite o elemento que deseja colocar na arvore: ");
+            elemento = scanner.nextInt();
+            tree.add(elemento);
+            contador++;
         }
         while (start) {
-            System.out.println("Escolha como voce quer ver a arvore!");
-            System.out.println("1- Pre ordem!");
-            System.out.println("2- In ordem!");
-            System.out.println("3- Pos ordem!");
-            System.out.println("-1- Parar o programa!");
-            int escolha = input.nextInt();
+            System.out.println("\n1- Pre-Order");
+            System.out.println("2- In-Order");
+            System.out.println("3- Post-Order");
+            System.out.println("4- Remover elemento");
+            System.out.println("5- Buscar elemento");
+            System.out.print("Parar o programa - Nenhuma das opções acima.\nOpção: ");
+            int escolha = scanner.nextInt();
             switch (escolha) {
                 case 1:
-                    System.out.println("Pre-Order: " + tree.preOrder());
+                    System.out.println("\nPre-Order: " + tree.preOrder());
                     break;
                 case 2:
-                    System.out.println("In-Order: " + tree.inOrder());
+                    System.out.println("\nIn-Order: " + tree.inOrder());
                     break;
-
                 case 3:
-                    System.out.println("Post-Order: " + tree.postOrder());
+                    System.out.println("\nPost-Order: " + tree.postOrder());
                     break;
-
-                case -1:
+                case 4:
+                    System.out.print("\nElemento: ");
+                    elemento = scanner.nextInt();
+                    tree.remove(elemento);
+                    break;
+                case 5:
+                    System.out.print("\nElemento: ");
+                    elemento = scanner.nextInt();
+                    System.out.println("Contains " + elemento + ": " + tree.contains(elemento));
+                    break;
+                default:
                     start = false;
                     break;
             }
-
         }
+        scanner.close();
         // tree.add(10);
         // tree.add(20);
         // tree.add(35);

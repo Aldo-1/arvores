@@ -131,28 +131,35 @@ public class AVLTree<T extends Comparable<T>> extends Tree<T> {
     private void balancTreeRemove(Node<T> root) {
         if (root != null) {
             this.balancFactor(root);
-            Node<T> left = root.getLeft();
-            Node<T> right = root.getRight();
-            if (root.getBf() == 2) {
+            var left = root.getLeft();
+            var right = root.getRight();
+            var father = root.getFather();
+            int bf = root.getBf();
+            // Pesado para esquerda
+            if (bf == 2) {
+                // Reta tendendo para esquerda. Fazer rotação a direita em root
                 if (left != null && left.getBf() == 1) {
                     rightRotation(root);
-                } else if (right != null && right.getBf() == -1) {
-                    leftRotation(right);
+                } else if (left != null && left.getBf() == -1) {
+                    // Triângulo, rotação a esquerda e depois rotação a direita em root.
+                    leftRotation(left);
                     rightRotation(root);
-                } else if (root.getHeightLeft() > root.getHeightRight()) {
+                } else {
                     rightRotation(root);
                 }
-            } else if (root.getBf() == -2) {
+                // Pesado para a direita
+            } else if (bf == -2) {
                 if (right != null && right.getBf() == -1) {
                     leftRotation(root);
-                } else if (left != null && left.getBf() == 1) {
-                    rightRotation(left);
+                } else if (right != null && right.getBf() == 1) {
+                    // Triângulo, rotação para a direita e depois rotação esquerda em root.
+                    rightRotation(right);
                     leftRotation(root);
-                } else if (root.getHeightLeft() < root.getHeightRight()) {
+                } else {
                     leftRotation(root);
                 }
             }
-            this.balancTreeRemove(root.getFather());
+            this.balancTreeRemove(father);
         }
     }
 
